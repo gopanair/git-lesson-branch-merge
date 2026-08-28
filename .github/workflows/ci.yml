@@ -1,0 +1,33 @@
+# CI for the branch-and-merge lesson.
+#
+# It runs on every push to main — which, in this lesson, is the moment your
+# merge lands. That is the whole point of the exercise: here, CI tells you
+# about a mistake AFTER main already has it.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:      # so you can re-run it by hand from the Actions tab
+
+jobs:
+  test:
+    name: Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get the code
+        uses: actions/checkout@v4
+
+      - name: Install Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: greetings.json is valid JSON
+        run: python3 -m json.tool greetings.json > /dev/null
+
+      - name: Run the tests
+        run: python3 test_greet.py
+
+      - name: The program still runs
+        run: python3 greet.py en Ada

@@ -95,3 +95,69 @@ git commit          # finishes the merge
 
 Add a language of your own, on a branch named after it, and land it in `main`.
 Then run `git log --oneline --graph` and find your commit.
+
+---
+
+## The build — and the lesson this repository cannot teach
+
+There is a CI job in `.github/workflows/ci.yml`. It installs Python, checks
+that `greetings.json` parses, runs the tests, and runs the program once. You
+can see every run under the **Actions** tab.
+
+Read its trigger:
+
+```yaml
+on:
+  push:
+    branches: [main]
+```
+
+It runs **when your merge lands on `main`**. Not before. In this flow there is
+no earlier moment for it to run in — you merged on your own machine and pushed
+the result, so the first time a server saw your work, it was already `main`.
+
+### Exercise: break it on purpose
+
+A branch called `add-italian` is waiting in this repository, and the change on
+it is wrong. Land it the way lesson 1 taught you:
+
+```bash
+git fetch origin
+git switch main
+git pull
+git merge origin/add-italian
+git push
+```
+
+Now open the **Actions** tab. The build is red, and `main` is broken. Anyone
+who clones this repository right now gets code that does not run.
+
+Look at what failed:
+
+```bash
+gh run list --limit 1
+gh run view --log-failed
+```
+
+### Putting it back
+
+`main` is published, and other people may have pulled it, so you do not rewrite
+history. You add a commit that undoes the bad one:
+
+```bash
+git revert <the-bad-commit-sha>    # git log --oneline will show you
+git push
+```
+
+CI goes green again, and the history honestly records both the mistake and the
+fix. `git reset --hard` would also "work" and is the wrong answer: it changes
+commits other people already have.
+
+### The point
+
+Nothing here was careless. You tested before you merged, and you still broke
+`main` — because the tests you ran were the ones you thought to run, on the
+machine you happened to have. A merge-it-yourself flow has no step where a
+neutral machine gets to say no.
+
+That is what lesson 2 adds, and it is the only difference that matters.

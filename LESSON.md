@@ -6,6 +6,20 @@ you do the work on a branch, you check it, you merge it yourself.
 You need push access to this repository (you own it, or you were added as a
 collaborator).
 
+## Before your first commit anywhere
+
+Git will not guess who you are, and if it does guess it guesses from the
+machine — which is how commits end up authored by `ec2-user@ip-10-0-1-106`.
+Once per machine:
+
+```bash
+git config --global user.name "Your Name"
+git config --global user.email "you@example.com"
+```
+
+Use the address on your GitHub account, or the `@users.noreply.github.com` one
+GitHub gives you, otherwise your commits will not be linked to your profile.
+
 ## The eight commands
 
 ```bash

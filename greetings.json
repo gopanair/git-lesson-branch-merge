@@ -2,5 +2,6 @@
   "en": "Hello, {name}!",
   "fr": "Bonjour, {name} !",
   "es": "¡Hola, {name}!",
-  "de": "Hallo, {name}!"
+  "de": "Hallo, {name}!",
+  "poop": "poop, {name}!"
 }
